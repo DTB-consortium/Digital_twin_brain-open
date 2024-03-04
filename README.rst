@@ -11,3 +11,6 @@ The network model gives the synaptic interactions between neurons by a directed 
 
 .. image:: doc/source/fig/brain.png
   :width: 800
+
+More detail refer to `Read docs <https://readthedocs.org/projects/dtb-open/>`_, and old code refer to
+`gitlab <https://gitlab.com/lu_seminar/spliking_nn_for_brain_simulation>`_.
