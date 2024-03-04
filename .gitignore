@@ -529,5 +529,6 @@ data/
 
 .DS_Store
 doc/.DS_Store
-**/*.png
+#**/*.png
+#!doc/source/fig
 test/test_generation_myown.py
