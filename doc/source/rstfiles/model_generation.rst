@@ -67,3 +67,24 @@ each node contain such property::
 Detailed code implementation
 -----------------------------
 Refer to ``generation`` and ``test``.
+
+
+Results
+-----------------------------
+In light of employing SV2 A PET as the modeling paradigm to determine the number of synaptic connection per voxel, the ensuing outcomes are as follows.
+
+.. image:: ../fig/num_neurons.png
+  :width: 600
+  :alt: The distribution of network size.
+
+Then we derive the average indegree for each voxel from different networks.
+
+.. image:: ../fig/num_indegree.png
+  :width: 600
+  :alt: The distribution of network indegree.
+
+The spike transmission velocity is 100m/s, and we derive the synaptic delay for each voxel pair.
+
+.. image:: ../fig/delays.png
+  :width: 400
+  :alt: The distribution of synaptic delays.
