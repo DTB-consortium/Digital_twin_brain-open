@@ -1,0 +1,219 @@
+syntax = "proto3";
+
+package snn;
+
+service Snn{
+       rpc GetVersion(Empty) returns(Version){}
+	rpc Init(InitRequest) returns (stream InitResponse) {}
+	rpc Run(RunRequest) returns (stream RunResponse) {}
+	rpc Updateprop(stream UpdatePropRequest) returns (UpdatePropResponse) {}
+	rpc Updategamma(stream UpdateGammaRequest) returns (UpdateGammaResponse) {}
+	rpc Updatehyperpara(stream UpdateHyperParaRequest) returns (UpdateHyperParaResponse) {}
+	rpc Updatesample(stream UpdateSampleRequest) returns (UpdateSampleResponse) {}
+	rpc Updateoubackgroundparam(stream UpdateOUBackgroundParamRequest) returns (UpdateOUBackgroundParamResponse) {}
+	rpc Updatettypecacurrentparam(stream UpdateTTypeCaCurrentParamRequest) returns (UpdateTTypeCaCurrentParamResponse) {}
+	rpc Updatedopaminecurrentparam(stream UpdateDopamineCurrentParamRequest) returns (UpdateDopamineCurrentParamResponse) {}
+	rpc Updateadaptationcurrentparam(stream UpdateAdaptationCurrentParamRequest) returns (UpdateAdaptationCurrentParamResponse) {}
+	rpc Shutdown(ShutdownRequest) returns (ShutdownResponse) {}
+}
+
+message Empty {}
+
+message Version
+{
+	int32 version = 1;
+}
+
+message InitRequest {
+       enum CommMode
+	{
+		COMM_P2P = 0;
+		COMM_ROUTE = 1;
+	}
+	
+	string file_path = 1;
+	float delta_t = 2;
+	CommMode mode = 3;
+}
+
+message SubblockInfo {
+	int32 subblk_id = 1;
+	int32 subblk_num = 2;
+}
+
+enum SnnStatus{
+   SNN_OK = 0;
+   SNN_INVALID_PARAMETER = 1;
+   SNN_UNSET_SAMPLE_FAILURE = 2;
+   SNN_UNSUPPORTED = 3;
+   SNN_NOT_ENABLE_METRIC = 4;
+   SNN_INVALID_NETWORK = 5;
+};
+
+message InitResponse {
+	SnnStatus status = 1;
+	int32 block_id = 2;
+	int32 neurons_per_block = 3;
+	repeated SubblockInfo subblk_info = 4;
+	double used_cpu_mem = 5;
+	double total_gpu_mem = 6;
+	double used_gpu_mem = 7;
+}
+
+message RunRequest {
+	int32 iter = 1;
+	int32 iter_offset = 2;
+	int32 t_steps = 3;
+	bool output_freq = 4;
+	bool freq_char = 5;
+	bool output_vmean = 6;
+	bool output_imean = 7;
+	bool use_ou_background = 8;
+	bool output_receptor_imeas = 9;
+	bool output_sample_spike = 10;
+	bool output_sample_vmemb = 11;
+	bool output_sample_iou = 12;
+	bool output_sample_isynaptic = 13;
+}
+
+message RunResponse {
+	SnnStatus status = 1;
+	repeated bytes freq = 2;
+	repeated bytes vmean = 3;
+	repeated bytes sample_spike = 4; 
+	repeated bytes sample_vmemb = 5; 
+	repeated bytes sample_iou = 6;
+	repeated bytes sample_isynaptic = 7;
+	repeated bytes imean = 8;
+	repeated bytes ampa_imean = 9;
+	repeated bytes nmda_imean = 10;
+	repeated bytes gabaa_imean = 11;
+	repeated bytes gabab_imean = 12;
+}
+
+enum PropType{
+	EXT_STIMULI_I = 0;
+	MEMBRANE_C = 1;
+	REF_T = 2;
+	LEAKAGE_G = 3;
+	LEAKAGE_V = 4;
+	THRESHOLD_V = 5;
+	RESET_V = 6;
+	CONDUCT_G_AMPA = 7;
+	CONDUCT_G_NMDA = 8;
+	CONDUCT_G_GABAa = 9;
+	CONDUCT_G_GABAb = 10;
+	MEMBRANE_V_AMPA = 11;
+	MEMBRANE_V_NMDA = 12;
+	MEMBRANE_V_GABAa = 13;
+	MEMBRANE_V_GABAb = 14;
+	TAO_AMPA = 15;
+	TAO_NMDA = 16;
+	TAO_GABAa = 17;
+	TAO_GABAb = 18;
+	NOISE_RATE = 19;
+};
+
+message UpdatePropRequest {
+	int32 block_id = 1;
+	repeated int32 neuron_id = 2;
+	repeated PropType prop_id = 3;
+	repeated float prop_val = 4;
+}
+
+message UpdatePropResponse {
+	bool success = 1;
+}
+
+message UpdateGammaRequest {
+	int32 block_id = 1;
+	repeated PropType prop_id = 2;
+	repeated int32 brain_id = 3;
+	repeated float gamma_concentration = 4;
+	repeated float gamma_rate = 5;
+}
+
+message UpdateGammaResponse {
+	bool success = 1;
+}
+
+message UpdateHyperParaRequest {
+	int32 block_id = 1;
+	repeated PropType prop_id = 2;
+	repeated int32 brain_id = 3;
+	repeated float hpara_val = 4;
+	bool assigned = 5;
+}
+
+message UpdateHyperParaResponse {
+	bool success = 1;
+}
+
+message UpdateSampleRequest {
+	int32 block_id = 1;
+	repeated int32 sample_idx = 2;
+}
+
+message UpdateSampleResponse {
+	bool success = 1;
+}
+
+message UpdateOUBackgroundParamRequest {
+	int32 block_id = 1;
+	repeated int32 brain_id = 2;
+	repeated float mean = 3;
+	repeated float deviation = 4;
+	repeated float correlation_time = 5;
+}
+
+message UpdateOUBackgroundParamResponse {
+	bool success = 1;
+}
+
+message UpdateTTypeCaCurrentParamRequest {
+	int32 block_id = 1;
+	repeated int32 brain_id = 2;
+	repeated float h_init = 3;
+	repeated float g_t = 4;
+	repeated float tao_h_minus = 5;
+	repeated float tao_h_plus = 6;
+	repeated float v_h = 7;
+	repeated float v_t = 8;
+}
+
+message UpdateTTypeCaCurrentParamResponse {
+	bool success = 1;
+}
+
+message UpdateDopamineCurrentParamRequest {
+	int32 block_id = 1;
+	repeated int32 brain_id = 2;
+	repeated float v_da= 3;
+	repeated float g_da = 4;
+}
+
+message UpdateDopamineCurrentParamResponse {
+	bool success = 1;
+}
+
+message UpdateAdaptationCurrentParamRequest {
+	int32 block_id = 1;
+	repeated int32 brain_id = 2;
+	repeated float ca_init = 3;
+	repeated float ca_decay = 4;
+	repeated float alpha_constant = 5;
+	repeated float v_k = 6;
+	repeated float g_ahp = 7;
+}
+
+message UpdateAdaptationCurrentParamResponse {
+	bool success = 1;
+}
+
+message ShutdownRequest {
+}
+
+message ShutdownResponse {
+	bool shutdown = 1;
+}
+
