@@ -10,6 +10,8 @@ The computational neuron is an integral unit that receives presynaptic spikes fr
 
 The network model gives the synaptic interactions between neurons by a directed multiplex graph. Structural MRI images (i.e., diffusion-weighted data and T1-weighted data) from biological brains are used to indirectly and partially measure the synaptic connections from neurons to neurons or from sub-regions to sub-regions.
 
+![Brain Image](doc/source/fig/brain.png)
+
 More details can be found in the [Read the Docs](https://readthedocs.org/projects/dtb-open/), and the old code can be found on [GitLab](https://gitlab.com/lu_seminar/spliking_nn_for_brain_simulation).
 
 ## Repository Contents
@@ -37,6 +39,14 @@ More details can be found in the [Read the Docs](https://readthedocs.org/project
 
 ### C++ Code
 - The directories **include**, **protos**, **src**, **tools**, along with the files **gencode.sh**, **Makefile**, and **setup.slurm**, contain the code and scripts necessary for running numerical simulations on the HIP platform.
+
+## Data
+- **New_Sparse_All_Feng_Data_with_New_Conn_Prob_1April_NCS.tar.gz**:This file contains the experimental data collected for generating the Digital Twin Brain (DTB) model, which includes:
+  - **dti_net_full**: Voxel-level DTI data.
+  - **dti_xyz**: Three-dimensional spatial coordinates for each voxel.
+  - **dti_aal_label**: Corresponding brain region ID data for each voxel.
+  - **dti_grey_matter**: Voxel-level gray matter data.
+  - **Resting_state**: Voxel-level resting-state fMRI signals.
 
 ## Requirements
 - **AMD ROCm software** (v4.0+)
